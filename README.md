@@ -1,1 +1,1 @@
-# ganhar-dinheiro-V.A
+# ganhar-dinheiro
